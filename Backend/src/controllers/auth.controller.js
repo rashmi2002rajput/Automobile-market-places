@@ -29,13 +29,20 @@ exports.register = async (req, res) => {
 };
 
 // LOGIN CONTROLLER
+// LOGIN CONTROLLER
+// LOGIN CONTROLLER
 exports.login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { identifier, password } = req.body;
 
+    if (!identifier || !password) {
+      return res.status(400).json({ message: "All fields required" });
+    }
+
+    // 🔍 email OR phone
     const [rows] = await pool.query(
-      "SELECT * FROM users WHERE email = ?",
-      [email]
+      "SELECT * FROM users WHERE email = ? OR phone = ?",
+      [identifier, identifier]
     );
 
     if (rows.length === 0) {
@@ -43,8 +50,8 @@ exports.login = async (req, res) => {
     }
 
     const user = rows[0];
-    const isMatch = await bcrypt.compare(password, user.password);
 
+    const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
@@ -53,8 +60,10 @@ exports.login = async (req, res) => {
       message: "Login successful",
       user: {
         id: user.id,
+        name: user.name,
         role: user.role,
         email: user.email,
+        phone: user.phone,
       },
     });
   } catch (error) {
@@ -62,3 +71,5 @@ exports.login = async (req, res) => {
     res.status(500).json({ message: "Login failed" });
   }
 };
+
+
