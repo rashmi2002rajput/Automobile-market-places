@@ -1,0 +1,160 @@
+/* ================= PAGE ================= */
+.dealer-profile-wrapper {
+  min-height: 100vh;
+  padding: 40px;
+  background: linear-gradient(135deg, #eef2ff, #f8fafc);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+/* ================= CARD ================= */
+.dealer-profile-card {
+  width: 100%;
+  max-width: 1100px;
+  background: #ffffff;
+  padding: 38px 42px 42px;
+  border-radius: 26px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden; /* 🔥 EXTRA SAFETY */
+}
+
+/* ================= TOP ACCENT ================= */
+.dealer-profile-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 6px;
+  width: 100%;
+  background: linear-gradient(90deg, #4f46e5, #22c55e);
+}
+
+/* ================= TITLE ================= */
+.dealer-profile-card h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #020617;
+  margin-bottom: 6px;
+}
+
+.sub-text {
+  font-size: 15px;
+  color: #64748b;
+  margin-bottom: 30px;
+}
+
+/* ================= FORM GRID ================= */
+.dealer-form {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr)); /* 🔥 FIX */
+  gap: 18px;
+  margin-bottom: 20px;
+}
+
+/* ================= INPUTS ================= */
+.dealer-form input,
+textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  font-size: 15px;
+  outline: none;
+  background: #f8fafc;
+  transition: all 0.25s ease;
+  box-sizing: border-box; /* 🔥 IMPORTANT */
+}
+
+.dealer-form input:focus,
+textarea:focus {
+  background: #ffffff;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+/* ================= GST SECTION ================= */
+.gst-wrapper {
+  grid-column: span 2; /* 🔥 MAIN FIX */
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.gst-input {
+  width: 100%;
+  background: #f1f5f9 !important;
+  cursor: not-allowed;
+  color: #334155;
+}
+
+.gst-badge {
+  width: fit-content;
+  font-size: 13px;
+  font-weight: 600;
+  color: #16a34a;
+  background: #dcfce7;
+  padding: 6px 14px;
+  border-radius: 999px;
+}
+
+/* ================= TEXTAREA ================= */
+textarea {
+  margin-top: 10px;
+  resize: none;
+}
+
+/* ================= ACTION BAR ================= */
+.action-bar {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 30px;
+}
+
+/* ================= BUTTON ================= */
+.save-btn {
+  padding: 14px 38px;
+  border-radius: 999px;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #ffffff;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  transition: all 0.3s ease;
+}
+
+.save-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 36px rgba(34, 197, 94, 0.4);
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 1024px) {
+  .dealer-form {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .gst-wrapper {
+    grid-column: span 1;
+  }
+}
+
+@media (max-width: 640px) {
+  .dealer-profile-wrapper {
+    padding: 20px;
+  }
+
+  .dealer-profile-card {
+    padding: 26px;
+  }
+
+  .dealer-form {
+    grid-template-columns: 1fr;
+  }
+
+  .action-bar {
+    justify-content: center;
+  }
+}
