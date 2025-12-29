@@ -179,3 +179,43 @@
   display: block;
   margin-bottom: 6px;
 }
+.success-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.success-modal {
+  background: #fff;
+  padding: 40px;
+  border-radius: 18px;
+  text-align: center;
+  width: 320px;
+}
+
+.success-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: #22c55e;
+  color: #fff;
+  font-size: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 15px;
+}
+
+.success-modal button {
+  margin-top: 20px;
+  padding: 10px 22px;
+  background: #38bdf8;
+  border: none;
+  border-radius: 20px;
+  font-weight: 600;
+  cursor: pointer;
+}

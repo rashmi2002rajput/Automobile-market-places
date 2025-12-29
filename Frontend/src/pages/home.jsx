@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import AuthPage from "./Authpage";
 
 const Home = () => {
@@ -9,6 +10,7 @@ const Home = () => {
   const [startOnRegister, setStartOnRegister] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [animKey, setAnimKey] = useState(0);
 
   const howItWorksRef = useRef(null);
 
@@ -32,6 +34,19 @@ const Home = () => {
     { title: "Buy or Request", desc: "Fast delivery", icon: "🚚" },
   ];
 
+  const fadeUp = {
+    hidden: { opacity: 0, y: 40 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: "easeOut" },
+    },
+  };
+
+  const stagger = {
+    visible: { transition: { staggerChildren: 0.15 } },
+  };
+
   const openLogin = () => {
     setAuthRole("user");
     setStartOnRegister(false);
@@ -49,18 +64,8 @@ const Home = () => {
     setUser(null);
     setShowLogoutModal(false);
     setShowProfileMenu(false);
+    setAnimKey((p) => p + 1);
   };
-
-  const scrollToHowItWorks = () => {
-    howItWorksRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  const hoverUp = {
-    transform: "translateY(-6px)",
-    boxShadow: "0 18px 40px rgba(0,0,0,0.15)",
-  };
-
-  const dropdownBg = "#0d0f7cff";
 
   const styles = {
     page: { fontFamily: "Segoe UI", background: "#f5f7fa" },
@@ -77,48 +82,13 @@ const Home = () => {
       zIndex: 100,
     },
 
-    navRight: { display: "flex", alignItems: "center", gap: 18 },
-
     navBtn: {
-      padding: "8px 18px",
-      borderRadius: 20,
+      padding: "10px 22px",
+      borderRadius: 25,
       border: "none",
       cursor: "pointer",
       background: "#38bdf8",
       fontWeight: 600,
-      transition: "all .3s",
-    },
-
-    avatar: {
-      width: 38,
-      height: 38,
-      borderRadius: "50%",
-      background: "#38bdf8",
-      color: "#020617",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      fontWeight: 700,
-      cursor: "pointer",
-    },
-
-    dropdown: {
-      position: "absolute",
-      right: 0,
-      top: 45,
-      background: dropdownBg,
-      borderRadius: 10,
-      boxShadow: "0 10px 30px rgba(0,0,0,.2)",
-      overflow: "hidden",
-      minWidth: 160,
-    },
-
-    dropItem: {
-      padding: "12px 15px",
-      cursor: "pointer",
-      color: "#fff",
-      background: dropdownBg,
-      transition: "all .2s",
     },
 
     section: { padding: "70px 40px" },
@@ -135,24 +105,14 @@ const Home = () => {
       borderRadius: 18,
       textAlign: "center",
       boxShadow: "0 10px 25px rgba(0,0,0,.08)",
-      cursor: "pointer",
-      transition: "all .3s",
-    },
-
-    dealerBox: {
-      background: "linear-gradient(135deg,#4f46e5,#6366f1)",
-      color: "#fff",
-      padding: "70px 40px",
-      textAlign: "center",
-      borderRadius: 25,
-      margin: "40px",
     },
 
     footer: {
       background: "#020617",
       color: "#cbd5f5",
-      padding: 30,
+      padding: 35,
       textAlign: "center",
+      marginTop: 60,
     },
 
     modalBackdrop: {
@@ -162,7 +122,6 @@ const Home = () => {
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      zIndex: 200,
     },
 
     modal: {
@@ -170,164 +129,184 @@ const Home = () => {
       padding: 30,
       borderRadius: 14,
       textAlign: "center",
-      width: 300,
+      width: 320,
     },
   };
 
   return (
     <div style={styles.page}>
       {/* NAVBAR */}
-      <nav style={styles.navbar}>
+      <motion.nav
+        style={styles.navbar}
+        initial={{ y: -80, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+      >
         <h2 style={{ color: "#38bdf8" }}>CarMarketPlace</h2>
 
-        <div style={styles.navRight}>
-          <button
-            onClick={scrollToHowItWorks}
-            style={{ background: "none", border: "none", color: "#cbd5f5", cursor: "pointer" }}
-          >
-            How it works
+        {!user ? (
+          <button style={styles.navBtn} onClick={openLogin}>
+            Login / Register
           </button>
-
-          {!user ? (
-            <button style={styles.navBtn} onClick={openLogin}>
-              Login / Register
-            </button>
-          ) : (
-            <div style={{ position: "relative" }}>
-              <div
-                style={styles.avatar}
-                onClick={() => setShowProfileMenu(!showProfileMenu)}
-              >
-                {user.name?.charAt(0).toUpperCase()}
-              </div>
-
-              {showProfileMenu && (
-                <div style={styles.dropdown}>
-                  <div
-                    style={styles.dropItem}
-                    onMouseEnter={(e) => (e.target.style.background = "#38bdf8")}
-                    onMouseLeave={(e) => (e.target.style.background = dropdownBg)}
-                  >
-                    ✏️ Edit Profile
-                  </div>
-
-                  <div
-                    style={styles.dropItem}
-                    onClick={() => setShowLogoutModal(true)}
-                    onMouseEnter={(e) => (e.target.style.background = "#ef4444")}
-                    onMouseLeave={(e) => (e.target.style.background = dropdownBg)}
-                  >
-                    🚪 Logout
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-      </nav>
+        ) : (
+          <button style={styles.navBtn} onClick={() => setShowLogoutModal(true)}>
+            Logout
+          </button>
+        )}
+      </motion.nav>
 
       {/* HERO */}
-      <section style={{ padding: "110px 20px", textAlign: "center", background: "#020617", color: "#fff" }}>
-        <h1>Find Genuine Auto Parts Instantly</h1>
-        <p>Search, compare and buy auto parts</p>
+      <motion.section
+        key={animKey}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: false }}
+        variants={fadeUp}
+        style={{
+          padding: "120px 20px",
+          textAlign: "center",
+          background: "#020617",
+          color: "#fff",
+        }}
+      >
+        <motion.h1 variants={fadeUp}>
+          Find Genuine Auto Parts Instantly
+        </motion.h1>
 
-        <input
+        <motion.p variants={fadeUp}>
+          Search, compare and buy auto parts
+        </motion.p>
+
+        <motion.input
+          variants={fadeUp}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search part, vehicle or OEM"
-          style={{ padding: 14, width: 320, borderRadius: 30, border: "none", marginTop: 20 }}
+          style={{
+            padding: 14,
+            width: 340,
+            borderRadius: 30,
+            border: "none",
+            marginTop: 25,
+          }}
         />
 
-        <div style={{ marginTop: 20, display: "flex", gap: 14, justifyContent: "center" }}>
-          <button style={styles.navBtn}>Search Parts</button>
+        <motion.div
+          variants={fadeUp}
+          style={{ marginTop: 25, display: "flex", gap: 15, justifyContent: "center" }}
+        >
+          <button style={styles.navBtn}>🔍 Search Parts</button>
           <button
-            style={{ ...styles.navBtn, background: "transparent", border: "1px solid #38bdf8", color: "#38bdf8" }}
+            style={{
+              ...styles.navBtn,
+              background: "transparent",
+              border: "2px solid #38bdf8",
+              color: "#38bdf8",
+            }}
             onClick={openDealer}
           >
             Become Dealer
           </button>
-        </div>
-      </section>
+        </motion.div>
+      </motion.section>
 
       {/* CATEGORIES */}
-      <section style={styles.section}>
+      <motion.section
+        style={styles.section}
+        variants={stagger}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: false }}
+      >
         <h2 style={{ textAlign: "center" }}>Popular Categories</h2>
         <div style={styles.grid}>
           {categories.map((c, i) => (
-            <div
-              key={i}
-              style={styles.card}
-              onMouseEnter={(e) => Object.assign(e.currentTarget.style, hoverUp)}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "none";
-                e.currentTarget.style.boxShadow = styles.card.boxShadow;
-              }}
-            >
+            <motion.div key={i} style={styles.card} variants={fadeUp}>
               🚗 <h3>{c}</h3>
-            </div>
+            </motion.div>
           ))}
         </div>
-      </section>
+      </motion.section>
 
       {/* HOW IT WORKS */}
-      <section style={styles.section} ref={howItWorksRef}>
+      <motion.section
+        ref={howItWorksRef}
+        style={styles.section}
+        variants={stagger}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: false }}
+      >
         <h2 style={{ textAlign: "center" }}>How It Works</h2>
         <div style={styles.grid}>
           {steps.map((s, i) => (
-            <div
-              key={i}
-              style={styles.card}
-              onMouseEnter={(e) => Object.assign(e.currentTarget.style, hoverUp)}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "none";
-                e.currentTarget.style.boxShadow = styles.card.boxShadow;
-              }}
-            >
+            <motion.div key={i} style={styles.card} variants={fadeUp}>
               <div style={{ fontSize: 30 }}>{s.icon}</div>
               <h3>{s.title}</h3>
               <p>{s.desc}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
-      </section>
+      </motion.section>
 
-      {/* DEALER CTA */}
-      <div style={styles.dealerBox}>
-        <h2>Are You an Auto Parts Dealer?</h2>
-        <button style={styles.navBtn} onClick={openDealer}>
-          Join as Dealer
-        </button>
-      </div>
-
+      {/* FOOTER */}
       <footer style={styles.footer}>
         © 2025 CarMarketPlace · All rights reserved
       </footer>
 
-      {showAuth && (
-        <AuthPage
-          role={authRole}
-          startOnRegister={startOnRegister}
-          onClose={() => {
-            setShowAuth(false);
-            const savedUser = localStorage.getItem("user");
-            if (savedUser) setUser(JSON.parse(savedUser));
-          }}
-        />
-      )}
+      {/* AUTH MODAL */}
+      <AnimatePresence>
+        {showAuth && (
+          <AuthPage
+            role={authRole}
+            startOnRegister={startOnRegister}
+            onClose={() => {
+              setShowAuth(false);
+              const savedUser = localStorage.getItem("user");
+              if (savedUser) setUser(JSON.parse(savedUser));
+              setAnimKey((p) => p + 1);
+            }}
+          />
+        )}
+      </AnimatePresence>
 
-      {showLogoutModal && (
-        <div style={styles.modalBackdrop}>
-          <div style={styles.modal}>
-            <h3>Logout</h3>
-            <p>Are you sure?</p>
-            <button style={styles.navBtn} onClick={handleLogout}>
-              Yes, Logout
-            </button>
-            <br /><br />
-            <button onClick={() => setShowLogoutModal(false)}>Cancel</button>
-          </div>
-        </div>
-      )}
+      {/* LOGOUT MODAL */}
+      <AnimatePresence>
+        {showLogoutModal && (
+          <motion.div
+            style={styles.modalBackdrop}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              style={styles.modal}
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+            >
+              <h3>Logout</h3>
+              <p>Are you sure?</p>
+
+              <button style={styles.navBtn} onClick={handleLogout}>
+                Yes, Logout
+              </button>
+
+              <br /><br />
+
+              <button
+                style={{
+                  padding: "10px 22px",
+                  borderRadius: 25,
+                  border: "2px solid #020617",
+                  background: "transparent",
+                }}
+                onClick={() => setShowLogoutModal(false)}
+              >
+                Cancel
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
