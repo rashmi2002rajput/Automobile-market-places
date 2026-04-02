@@ -19,7 +19,7 @@
 .card {
   width: 500px;
   min-height: 520px;
-  max-height: 85vh;                 /* 🔥 screen safe */
+  max-height: 85vh;
   position: relative;
   transform-style: preserve-3d;
   transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
@@ -38,13 +38,11 @@
   border-radius: 18px;
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.18);
   backface-visibility: hidden;
-
   padding: 32px 34px;
-
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;      /* 🔥 FIX */
-  overflow-y: auto;                 /* 🔥 FIX */
+  justify-content: flex-start;
+  overflow-y: auto;
 }
 
 /* BACK SIDE */
@@ -52,7 +50,7 @@
   transform: rotateY(180deg);
 }
 
-/* ===== SCROLLBAR (CLEAN) ===== */
+/* ===== SCROLLBAR ===== */
 .side::-webkit-scrollbar {
   width: 6px;
 }
@@ -76,13 +74,18 @@
   justify-content: center;
   cursor: pointer;
   font-size: 16px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
   transition: transform 0.2s ease;
   z-index: 10;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: #111827;
 }
 
 .close-btn:hover {
   transform: scale(1.08);
+  background: #ffffff;
 }
 
 /* ===== HEADINGS ===== */
@@ -139,10 +142,25 @@
   font-size: 14px;
 }
 
-.switch-text span {
+.text-button {
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
   color: #4f46e5;
-  cursor: pointer;
+  font: inherit;
   font-weight: 600;
+  cursor: pointer;
+}
+
+.text-button:hover {
+  background: transparent;
+  color: #4338ca;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
 }
 
 /* ===== ROLE SELECT ===== */
@@ -161,17 +179,21 @@
   cursor: pointer;
   transition: all 0.3s ease;
   background: #f9fafb;
+  color: #111827;
+  margin-top: 0;
 }
 
 .role-card:hover {
   border-color: #6366f1;
+  background: #f9fafb;
+  color: #111827;
 }
 
 .role-card.active {
   border-color: #4f46e5;
   background: #eef2ff;
   color: #4f46e5;
-  box-shadow: 0 10px 24px rgba(79,70,229,0.3);
+  box-shadow: 0 10px 24px rgba(79, 70, 229, 0.3);
 }
 
 .role-icon {
@@ -179,10 +201,11 @@
   display: block;
   margin-bottom: 6px;
 }
+
 .success-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -203,11 +226,12 @@
   border-radius: 50%;
   background: #22c55e;
   color: #fff;
-  font-size: 36px;
+  font-size: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 15px;
+  font-weight: 700;
 }
 
 .success-modal button {
